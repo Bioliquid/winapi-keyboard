@@ -1,6 +1,9 @@
-#include "langs.h"
-#include "iokey.h"
 #include <algorithm>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <codecvt>
+#include "langs.h"
 
 langs::langs() {
 	step = STEP::NONE;
@@ -16,20 +19,20 @@ void langs::read(const char *lang_file_path) {
 }
 
 void langs::parse() {
-	wstring tmp;
+	std::wstring tmp;
 	for (auto el : translate_text) {
 		if (el != ' ' && el != '\n' && el != '\t') {
 			tmp += el;
 		}
 	}
-	wstring sub_text;
+	std::wstring sub_text;
 	for (auto str_el : tmp) {
 		switch (step) {
 			case langs::NONE:
 				sub_text += str_el;
-				if (sub_text == iokey::char_to_wchar("LANG_OPTIONS")) {
+				if (sub_text == char_to_wchar("LANG_OPTIONS")) {
 					step = STEP::OPTIONS;
-					sub_text = iokey::char_to_wchar("");
+					sub_text = char_to_wchar("");
 				}
 				break;
 			case langs::OPTIONS:
@@ -44,12 +47,12 @@ void langs::parse() {
 	}
 }
 
-void langs::parse_option(wstring s) {
-	wstring tmp;
+void langs::parse_option(std::wstring s) {
+	std::wstring tmp;
 	for (auto el : s) {
 		if (el == ',' || el == '}') {
 			translate_map[tmp[0]] = tmp[tmp.size() - 1];
-			tmp = iokey::char_to_wchar("");
+			tmp = char_to_wchar("");
 		}
 		else if (el != '{') {
 			tmp += el;

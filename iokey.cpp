@@ -4,25 +4,6 @@ INPUT iokey::ip;
 bool iokey::shift;
 langs iokey::lang;
 
-bool iokey::isAsciiAlpha(int code) {
-	return (code >= 0 && code <= 127 && isalpha(char(code)));
-}
-
-wchar_t* iokey::char_to_wchar(char *p) {
-	WCHAR *pwcsName;
-	int nChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
-	pwcsName = new WCHAR[nChars];
-	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, nChars);
-	return pwcsName;
-}
-
-char iokey::trans_char(char c, bool shift) {
-	if (shift == true) {
-		return toupper(c);
-	}
-	return tolower(c);
-}
-
 LRESULT CALLBACK iokey::KeyboardHook(int nCode, WPARAM wParam, LPARAM lParam) {
 	bool letter = true;
 	static int last = 0;
@@ -98,39 +79,13 @@ void iokey::release() {
 	SendInput(1, &ip, sizeof(INPUT));
 }
 
+void iokey::on_message() {
+	while (!GetMessage(&msg, NULL, 0, 0)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+
 void iokey::unhook() {
 	UnhookWindowsHookEx(hook);
 }
-
-/*
-if (code == 0xA2) { // LCTRL or first signal of RALT
-last = code;
-return CallNextHookEx(NULL, nCode, wParam, lParam);
-}
-if (last == 0xA2 && code == 0xA5) { //ralt
-letter = 0;
-}
-else if (last == 0xA2 && code != 0xA5) { //lctrl
-
-}
-if (code == 0xA3) { //rctrl
-letter = 0;
-}
-if (code == 0xA4) { //lalt
-letter = 0;
-}
-if (code == 0xA0) { //lshift
-letter = 0;
-shift = true;
-}
-if (code == 0xA1) { //rshift
-letter = 0;
-shift = true;
-}
-if (code == 0x08) { //esc
-letter = 0;
-}
-if (code == 0x0D) { // \n
-letter = 0;
-}
-*/

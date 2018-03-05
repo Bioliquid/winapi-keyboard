@@ -1,28 +1,23 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <codecvt>
 #include <map>
-using namespace std;
+#include <windows.h>
+#include "char_desc.h"
 
 class langs {
 public:
-
 	langs();
 
 	void read(const char *);
 	void parse();
 
-	map<char, wchar_t> translate_map;
+	std::map<char, wchar_t> translate_map;
 private:
-	void parse_option(wstring);
+	void parse_option(std::wstring);
 
 	enum STEP { NONE, OPTIONS };
 
 	STEP step;
 
-	wstring translate_text;
+	std::wstring translate_text;
 };

@@ -8,11 +8,6 @@ using namespace std;
 int main() {
 	iokey k;
 
-	while (!GetMessage(&k.msg, NULL, 0, 0)) {
-		TranslateMessage(&k.msg);
-		DispatchMessage(&k.msg);
-	}
+	k.on_message();
 	k.unhook();
-
-	system("pause");
 }
