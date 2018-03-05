@@ -67,13 +67,6 @@ void iokey::press(wchar_t *key) {
 	SendInput(1, &ip, sizeof(INPUT));
 }
 
-void iokey::press_special(int key) {
-	ip.ki.dwFlags = KEYEVENTF_UNICODE;
-	ip.ki.wVk = key;
-	ip.ki.wScan = 0;
-	SendInput(1, &ip, sizeof(INPUT));
-}
-
 void iokey::release() {
 	ip.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
 	SendInput(1, &ip, sizeof(INPUT));

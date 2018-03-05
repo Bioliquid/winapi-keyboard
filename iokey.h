@@ -15,7 +15,6 @@ public:
 	void unhook();
 private:
 	static void press(wchar_t*);
-	static void press_special(int);
 
 	static void release();
 
